@@ -1,0 +1,3 @@
+[submodule "InfiniTime"]
+	path = InfiniTime
+	url = git@github.com:InfiniTimeOrg/InfiniTime
