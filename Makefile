@@ -2,6 +2,8 @@ SRCS = $(wildcard *.cpp)
 OBJS = $(SRCS:.cpp=.o)
 DEPS = $(SRCS:.cpp=.d)
 
+SRCS += InfiniTime/src/components/sleep/SleepTracker.cpp
+
 CFLAGS += -IInfiniTime/src
 
 main: $(OBJS)
