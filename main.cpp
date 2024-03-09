@@ -27,7 +27,8 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
 
-    auto tracker = Pinetime::SleepTracker::VanHeesSleepTracker(callback);
+    auto tracker = Pinetime::SleepTracker::VanHeesSleepTracker();
+    tracker.Init(callback);
 
     float t, x, y, z, truth;
     while (infile >> t >> x >> y >> z >> truth) {

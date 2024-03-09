@@ -8,7 +8,7 @@ main: $(OBJS)
 	$(CXX) ${CFLAGS} $^ -o $@
 
 %.o: %.cpp
-	$(CXX) ${CFLAGS} -MMD -MP -c $< -o $@
+	$(CXX) -std=c++20 ${CFLAGS} -MMD -MP -c $< -o $@
 
 compile_commands.json:
 	$(MAKE) clean

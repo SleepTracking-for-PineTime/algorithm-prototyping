@@ -2,16 +2,12 @@
 
 namespace Pinetime {
     namespace SleepTracker {
-        SleepTracker::SleepTracker(void (*callback)(uint8_t)) : callback(callback) {}
+        void SleepTracker::Init(void (*state_update_callback)(uint8_t)) {
+            callback = state_update_callback;
+        }
 
         void SleepTracker::AnnounceUpdate(uint8_t state) {
             callback(state);
-        }
-
-        VanHeesSleepTracker::VanHeesSleepTracker(void (*callback)(uint8_t)) :
-            SleepTracker(callback),
-            accel_avgs{0, 0, 0}
-        {
         }
 
         void VanHeesSleepTracker::UpdateAccel(float x, float y, float z) {

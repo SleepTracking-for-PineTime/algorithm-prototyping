@@ -10,12 +10,12 @@ namespace Pinetime {
     namespace SleepTracker {
         class SleepTracker {
             public:
-                explicit SleepTracker(void (*callback)(uint8_t));
                 virtual void UpdateAccel(float x, float y, float z) = 0;
                 virtual ~SleepTracker() = default;
+                void Init(void (*state_update_callback)(uint8_t));
 
             private:
-                void (*callback)(uint8_t);
+                void (*callback)(uint8_t) = nullptr;
 
             protected:
                 void AnnounceUpdate(uint8_t state);
@@ -23,7 +23,6 @@ namespace Pinetime {
 
         class VanHeesSleepTracker : public SleepTracker {
             public:
-                explicit VanHeesSleepTracker(void (*callback)(uint8_t));
                 void UpdateAccel(float x, float y, float z) override;
                 ~VanHeesSleepTracker() override = default;
 
