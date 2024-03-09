@@ -8,7 +8,11 @@ namespace Pinetime {
             callback(state);
         }
 
-        VanHeesSleepTracker::VanHeesSleepTracker(void (*callback)(uint8_t)) : SleepTracker(callback) {}
+        VanHeesSleepTracker::VanHeesSleepTracker(void (*callback)(uint8_t)) :
+            SleepTracker(callback),
+            accel_avgs{0, 0, 0}
+        {
+        }
 
         void VanHeesSleepTracker::UpdateAccel(float x, float y, float z) {
             // update averages
@@ -24,13 +28,14 @@ namespace Pinetime {
             if (iteration == (fs*seconds_per_update)) {
                 // average arm angle in this new window
                 float arm_angle_mean = 0;
-                for (int i = 0; i < fs*seconds_per_update; i++)
+                for (int i = 0; i < fs*seconds_per_update; i++) {
                     arm_angle_mean += arm_angle_hist[i];
+                }
                 arm_angle_mean = arm_angle_mean/(fs*seconds_per_update);
 
-                if (!isnan(arm_angle_mean_d)) {
+                if (!std::isnan(arm_angle_mean_d)) {
                     // change in arm angle since last window
-                    float arm_angle_change = abs(arm_angle_mean - arm_angle_mean_d);
+                    float arm_angle_change = fabsf(arm_angle_mean - arm_angle_mean_d);
 
                     // keep history of changes in arm angle for some longer duration
                     arm_angle_change_hist++;
@@ -44,15 +49,16 @@ namespace Pinetime {
                         // if arm angle has not changed significantly between two windows for the last
                         // <classification_hist_size> windows, classify as sleep. otherwise classify as awake
                         uint8_t new_state = 1;
-                        for (int i = 0; i < classification_hist_size; i++) {
+                        for (unsigned int i = 0; i < classification_hist_size; i++) {
                             if (arm_angle_change_hist[i] > arm_angle_threshold) {
                                 new_state = 0;
                                 break;
                             }
                         }
 
-                        if (new_state != state)
+                        if (new_state != state) {
                             AnnounceUpdate(new_state);
+                        }
 
                         state = new_state;
                     }
@@ -70,7 +76,7 @@ namespace Pinetime {
         }
 
         float VanHeesSleepTracker::ang(float x, float y, float z) {
-            return atanf(z / sqrtf(powf(x, 2) + powf(y, 2))) * 180/M_PI;
+            return atanf(z / sqrtf(powf(x, 2) + powf(y, 2))) * 180/(float)std::numbers::pi;
         }
     };
 };
