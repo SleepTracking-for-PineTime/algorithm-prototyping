@@ -5,6 +5,7 @@ DEPS = $(SRCS:.cpp=.d)
 SRCS += InfiniTime/src/components/sleep/SleepTracker.cpp
 
 CFLAGS += -IInfiniTime/src
+CFLAGS += -IInfiniTime/src/components/sleep/
 
 main: $(OBJS)
 	$(CXX) ${CFLAGS} $^ -o $@
